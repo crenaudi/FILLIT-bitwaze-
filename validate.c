@@ -6,14 +6,14 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/09 18:00:51 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/01/10 19:40:34 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/01/11 23:15:29 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
 #include "fillit.h"
 
-static int		grid(const char *s, int x, int y)
+static int	grid(const char *s, int x, int y)
 {
 	int	i;
 
@@ -40,7 +40,7 @@ static int		grid(const char *s, int x, int y)
 	return (0);
 }
 
-static int		split(char **tmp, int j, const char *src)
+static int	split(char **tmp, int j, const char *src)
 {
 	char	*dest;
 	int		i;
@@ -64,16 +64,16 @@ static int		split(char **tmp, int j, const char *src)
 	return (1);
 }
 
-static int		piece_is_valid(unsigned short ref)
+static int	piece_is_valid(uint16_t ref)
 {
-	static unsigned short	tab[19] = {
+	static uint16_t	tab[19] = {
 		0xF000, 0x8888,
 		0xCC00,
 		0xC600, 0x6C00, 0x8C40, 0x4C80,
 		0xE400, 0x4E00, 0x4C40, 0x8C80,
 		0x88C0, 0x44C0, 0x8E00, 0xE800, 0x2E00, 0xE200, 0xC440, 0xC880
 	};
-	int						i;
+	int				i;
 
 	i = 0;
 	while (i < 19)
@@ -85,10 +85,10 @@ static int		piece_is_valid(unsigned short ref)
 	return (0);
 }
 
-static int		parse_piece(char const *s)
+static int	parse_piece(char const *s)
 {
-	unsigned short	piece;
-	int				i;
+	uint16_t	piece;
+	int			i;
 
 	i = 0;
 	piece = 0;
@@ -105,15 +105,15 @@ static int		parse_piece(char const *s)
 		piece = piece << 4;
 	if (!(piece_is_valid(piece)))
 		return (0);
-	return (piece);
+	return ((unsigned short)piece);
 }
 
-char			make_tab(const char *src, int i, int j)
+char		make_tab(const char *src, int i, int j)
 {
-	unsigned short	tab[11] = {0};
-	unsigned short	piece;
-	char			*tmp;
-	int				nb_piece;
+	t_piece		tab[12];
+	t_piece		piece;
+	char		*tmp;
+	int			nb_piece;
 
 	if ((nb_piece = grid(src, 0, 0)) <= 0 || nb_piece > 26)
 		return (0);
@@ -124,11 +124,13 @@ char			make_tab(const char *src, int i, int j)
 	j = 0;
 	while (nb_piece != i)
 	{
-		if ((piece = parse_piece(ft_strsub(tmp, j, 16))) == 0)
+		if ((piece.data = parse_piece(ft_strsub(tmp, j, 16))) == 0)
 			return (0);
 		j = j + 16;
-		i++;
 		tab[i] = piece;
+		piece.y = 0;
+		piece.have_place = 0;
+		i++;
 	}
 	return (solver(tab, nb_piece, 0));
 }
