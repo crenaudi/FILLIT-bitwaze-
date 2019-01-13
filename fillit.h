@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/17 17:23:35 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/01/11 19:34:00 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/01/13 19:17:45 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,16 @@ typedef struct	s_tetri
 
 typedef struct	s_piece
 {
+	int			x;
 	int			y;
-	int			have_place;
+	int			h;
+	int			w;
 	uint16_t	data;
 }				t_piece;
 
 int		fillit(const int fd);
 char	make_tab(const char *src, int i, int j);
+void	height_width_piece(t_piece *piece);
 int		solver(t_piece tab[], int nb_piece, int round);
 
 # endif

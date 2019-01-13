@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/09 18:00:51 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/01/11 23:15:29 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/01/13 21:13:49 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	grid(const char *s, int x, int y)
 			i = 0;
 		if (s[x] == '\n' && (s[++x] == '\n' || s[x] == '\0'))
 		{
-			if ((x - ((x / 4) * 4)) - y != 0)
+			if ((x - y) % 4 != 0)
 				return (0);
 			y++;
 		}
@@ -36,7 +36,9 @@ static int	grid(const char *s, int x, int y)
 			x++;
 	}
 	if ((x + 1) % 21 == 0 && (x + 1) / 21 == y)
+	{
 		return (y);
+	}
 	return (0);
 }
 
@@ -127,9 +129,8 @@ char		make_tab(const char *src, int i, int j)
 		if ((piece.data = parse_piece(ft_strsub(tmp, j, 16))) == 0)
 			return (0);
 		j = j + 16;
+		height_width_piece(&piece);
 		tab[i] = piece;
-		piece.y = 0;
-		piece.have_place = 0;
 		i++;
 	}
 	return (solver(tab, nb_piece, 0));

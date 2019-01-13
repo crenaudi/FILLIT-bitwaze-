@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/17 16:53:06 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/01/10 17:44:14 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/01/13 21:17:31 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int		main(int argc, char **argv)
 	(void)argc;
 	if (fillit(fd) == 0)
 	{
-		ft_putstr("error");
+		ft_putstr("error\n");
 		return (1);
 	}
 	close(fd);
