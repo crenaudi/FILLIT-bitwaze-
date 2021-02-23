@@ -13,6 +13,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <stdio.h>
 #include "fillit.h"
 
 int		check_c(char const *s)
@@ -50,7 +51,9 @@ int		fillit(const int fd)
 		return (0);
 	if (check_c(src) != 1)
 		return (0);
-	if (make_tab(src, i, ret) == 0)
+	int test;
+	test = make_tab(src, i, ret);
+	if (test == 0)
 		return (0);
 	free(src);
 	src = NULL;

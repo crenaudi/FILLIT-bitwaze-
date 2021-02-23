@@ -110,7 +110,7 @@ static int	parse_piece(char const *s)
 	return ((unsigned short)piece);
 }
 
-char		make_tab(const char *src, int i, int j)
+int		make_tab(const char *src, int i, int j)
 {
 	t_piece		tab[12];
 	t_piece		piece;
@@ -120,7 +120,6 @@ char		make_tab(const char *src, int i, int j)
 
 	if ((info.nb_piece = grid(src, 0, 0)) <= 0 || info.nb_piece > 26)
 		return (0);
-	tmp = NULL;
 	if (!(split(&tmp, (info.nb_piece * 16), src)))
 		return (0);
 	j = 0;
@@ -129,12 +128,15 @@ char		make_tab(const char *src, int i, int j)
 		tmp_sub = ft_strsub(tmp, j, 16);
 		if ((piece.data = parse_piece(tmp_sub)) == 0)
 			return (0);
+		free(tmp_sub);
+		tmp_sub = NULL;
 		j = j + 16;
 		height_width_piece(&piece);
 		tab[i++] = piece;
 	}
 	if (solver(tab, info.nb_piece, 0, &info) == 0)
 		return (0);
-	freeland(tmp, tmp_sub);
+	free(tmp);
+	tmp = NULL;
 	return (1);
 }

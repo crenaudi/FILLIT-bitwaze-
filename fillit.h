@@ -15,6 +15,7 @@
 # define BUF_SIZE 42
 # include "libft/libft.h"
 # include <stdint.h>
+# include <stdio.h>
 
 typedef struct	s_tetri
 {
@@ -40,7 +41,7 @@ typedef struct	s_piece
 }				t_piece;
 
 int				fillit(const int fd);
-char			make_tab(const char *src, int i, int j);
+int				make_tab(const char *src, int i, int j);
 void			height_width_piece(t_piece *piece);
 int				solver(t_piece tab[], int nb_piece, int rnd, t_info_map *info);
 int				print_sort(t_piece tab[], int i, int nb_piece);
