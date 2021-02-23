@@ -6,7 +6,7 @@
 #    By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/13 14:13:30 by crenaudi          #+#    #+#              #
-#    Updated: 2019/01/10 16:35:01 by crenaudi         ###   ########.fr        #
+#    Updated: 2019/01/16 19:40:58 by crenaudi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -90,21 +90,21 @@ $(NAME): $(OBJ)
 	@$(CC) $(CFLAGS) $(SRC) -I .
 	@$(AR) $(NAME) $(OBJ)
 	@$(RL) $(NAME)
-	@echo ".........."
-	@echo "| all ok |"
-	@echo ".........."
+	@echo ".............."
+	@echo "| all lib ok |"
+	@echo ".............."
 
 clean:
 	@$(RM) $(OBJ)
-	@echo "............"
-	@echo "| clean ok |"
-	@echo "............"
+	@echo "................"
+	@echo "| clean lib ok |"
+	@echo "................"
 
 fclean: clean
 	@$(RM) $(NAME)
-	@echo "............."
-	@echo "| fclean ok |"
-	@echo "............."
+	@echo "................."
+	@echo "| fclean lib ok |"
+	@echo "................."
 
 re: fclean all
 

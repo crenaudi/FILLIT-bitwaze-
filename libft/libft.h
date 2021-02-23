@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 19:22:25 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/01/10 16:34:19 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/01/16 22:00:30 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int					ft_isprint(int c);
 int					ft_toupper(int c);
 int					ft_tolower(int c);
 size_t				ft_recursive_power(int nb, int power);
-int 				ft_sqrt(int nb);
+int					ft_sqrt(int nb);
 void				*ft_memalloc(size_t size);
 void				ft_memdel(void **ap);
 char				*ft_strnew(size_t size);

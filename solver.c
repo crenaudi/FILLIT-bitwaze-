@@ -6,17 +6,13 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 19:17:27 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/01/13 21:29:24 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/01/16 22:58:09 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include "libft/libft.h"
 #include "fillit.h"
 
-void			print_map(uint16_t map[]);
-
-static void		enable_bits(t_piece piece, uint16_t map[], int y)
+static void	enable_bits(t_piece piece, uint16_t map[], int y)
 {
 	int		i;
 
@@ -28,21 +24,7 @@ static void		enable_bits(t_piece piece, uint16_t map[], int y)
 	}
 }
 
-/*
-	a = 1000 1000
-	b = 1100 0111
-	c=     b
-		& ~a
-	c =      1100 0111
-		&	~1000 1000
-
-	c =		1100 0111
-		&	0111 0111
-			0100 0111
-*/
-
-
-static void		disable_bits(t_piece piece, uint16_t map[], int y)
+static void	disable_bits(t_piece piece, uint16_t map[], int y)
 {
 	int			i;
 
@@ -54,20 +36,6 @@ static void		disable_bits(t_piece piece, uint16_t map[], int y)
 	}
 }
 
-
-void			print_map(uint16_t map[])
-{
-	int		i;
-
-	i = 0;
-	while (i != 8)
-	{
-		ft_print_bits(map[i], 16, 16);
-		i++;
-	}
-	ft_putchar('\n');
-}
-
 static int	test_place(t_piece piece, uint16_t map[], int y)
 {
 	int	i;
@@ -77,50 +45,45 @@ static int	test_place(t_piece piece, uint16_t map[], int y)
 	x = piece.x;
 	while (i < 4)
 	{
-		if (((piece.data >> (4 * i) & 0xF) & (map[y + (3 - i)] >> (12 - piece.x))) != 0)
+		if (((piece.data >> (4 * i) & 0xF)
+					& (map[y + (3 - i)] >> (12 - piece.x))) != 0)
 			return (0);
 		i++;
 	}
-	//piece.have_place = 1;
 	return (1);
 }
 
-static int	resolve(t_piece piece, uint16_t map[], int y, t_piece tab[], int i, int nb_piece)
+static int	resolve(t_piece *p, t_info_map *info, t_piece tab[], int i)
 {
 	static int	index = 0;
-	int			stop;
 	int			j;
 
 	j = 0;
-	stop = i;
-	if (index == nb_piece)
+	if (index == info->nb_piece)
 		return (1);
-	piece.x = 0;
-	piece.y = 0;
-	while (y <= (i - piece.h))
+	p->y = 0;
+	while (p->y <= (i - p->h))
 	{
-		piece.x = 0;
-		while (piece.x <= (i - piece.w))
+		p->x = 0;
+		while (p->x <= (i - p->w))
 		{
-			if (test_place(piece, map, y) == 1)
+			if (test_place(*p, info->map, p->y) == 1)
 			{
-				enable_bits(piece, map, y);
-				index++;
-				if (resolve(tab[index], map, 0, tab, i, nb_piece) == 1)
+				enable_bits(*p, info->map, p->y);
+				if (resolve(&tab[++index], info, tab, i) == 1)
 					return (1);
 				index--;
-				disable_bits(piece, map, y);
+				disable_bits(*p, info->map, p->y);
 			}
-			piece.x++;
+			p->x++;
 		}
-		y++;
+		p->y++;
 	}
 	return (0);
 }
 
-int			solver(t_piece tab[], int nb_piece, int round)
+int			solver(t_piece tab[], int nb_piece, int rnd, t_info_map *info)
 {
-	uint16_t	map[16];
 	uint16_t	ligne;
 	int			index;
 	int			i;
@@ -128,31 +91,22 @@ int			solver(t_piece tab[], int nb_piece, int round)
 	i = (ft_sqrt(nb_piece * 4));
 	if (i * i < nb_piece * 4)
 		i++;
-	i += round;
-	//printf("%d %d\n", nb_piece, ft_sqrt(nb_piece * 4));
+	i += rnd;
 	index = 0;
-	ligne = 0;
-	ligne |= 1 << (16 - (i + 1));
-	ligne |= 1 << (16 - (i + 2));
+	ligne = 1 << (16 - (i + 1));
 	while (index != i)
-	{
-		map[index] = ligne;
-		index++;
-	}
+		info->map[index++] = ligne;
 	while (index != 16)
+		info->map[index++] = 0xFFFF;
+	if (resolve(&tab[0], info, tab, i) == 0)
 	{
-		map[index] = 0xFFFF;
-		index++;
-	}
-	//attention tu n'envoie qu'une copie de ta piece penser a &tab[0], *piece, piece->elment
-	if (resolve(tab[0], map, 0, tab, i, nb_piece) == 0)
-	{
-		round++;
-		solver(tab, nb_piece, round);
+		rnd++;
+		solver(tab, nb_piece, rnd, info);
 	}
 	else
 	{
-		print_map(map);
+		if (print_sort(tab, i, nb_piece) == 0)
+			return (0);
 	}
 	return (1);
 }

@@ -6,11 +6,10 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/09 18:00:51 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/01/13 21:13:49 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/01/17 18:56:47 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/libft.h"
 #include "fillit.h"
 
 static int	grid(const char *s, int x, int y)
@@ -100,9 +99,10 @@ static int	parse_piece(char const *s)
 			piece |= 1 << (15 - i);
 		i++;
 	}
+	if (piece == 0)
+		return (0);
 	while (!(0x8888 & piece))
 		piece = piece << 1;
-	i = 0;
 	while (!(0xF000 & piece))
 		piece = piece << 4;
 	if (!(piece_is_valid(piece)))
@@ -114,24 +114,27 @@ char		make_tab(const char *src, int i, int j)
 {
 	t_piece		tab[12];
 	t_piece		piece;
+	t_info_map	info;
 	char		*tmp;
-	int			nb_piece;
+	char		*tmp_sub;
 
-	if ((nb_piece = grid(src, 0, 0)) <= 0 || nb_piece > 26)
+	if ((info.nb_piece = grid(src, 0, 0)) <= 0 || info.nb_piece > 26)
 		return (0);
-	j = nb_piece * 16;
 	tmp = NULL;
-	if (!(split(&tmp, j, src)))
+	if (!(split(&tmp, (info.nb_piece * 16), src)))
 		return (0);
 	j = 0;
-	while (nb_piece != i)
+	while (info.nb_piece != i)
 	{
-		if ((piece.data = parse_piece(ft_strsub(tmp, j, 16))) == 0)
+		tmp_sub = ft_strsub(tmp, j, 16);
+		if ((piece.data = parse_piece(tmp_sub)) == 0)
 			return (0);
 		j = j + 16;
 		height_width_piece(&piece);
-		tab[i] = piece;
-		i++;
+		tab[i++] = piece;
 	}
-	return (solver(tab, nb_piece, 0));
+	if (solver(tab, info.nb_piece, 0, &info) == 0)
+		return (0);
+	freeland(tmp, tmp_sub);
+	return (1);
 }

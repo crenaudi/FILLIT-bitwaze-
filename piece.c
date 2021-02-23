@@ -1,33 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_sqrt.c                                          :+:      :+:    :+:   */
+/*   piece.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/08/09 22:13:18 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/01/13 17:47:09 by crenaudi         ###   ########.fr       */
+/*   Created: 2019/01/13 18:48:07 by crenaudi          #+#    #+#             */
+/*   Updated: 2019/01/13 19:54:44 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "fillit.h"
 
-int		ft_sqrt(int nb)
+void	height_width_piece(t_piece *piece)
 {
-	int		i;
+	int	x;
+	int	y;
+	int	tmp;
 
-	if (nb <= 0)
-		return (0);
-	if (nb == 1)
-		return (1);
-	i = 1;
-	while (i < 46342)
+	y = 0;
+	piece->h = 0;
+	piece->w = 0;
+	while (y < 4)
 	{
-		if ((i * i) == nb)
-			return (i);
-		else if ((i * i) > nb)
-			return (i - 1);
-		i++;
+		tmp = 0;
+		if ((piece->data >> (4 * y) & 0xF) != 0)
+			piece->h++;
+		x = 0;
+		while (x < 4)
+		{
+			if (((piece->data >> (4 * y) & 0xF) & (1 << (3 - x))) != 0)
+				tmp++;
+			x++;
+		}
+		if (tmp > piece->w)
+			piece->w = tmp;
+		y++;
 	}
-	return (i);
 }
